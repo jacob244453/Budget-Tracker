@@ -99,20 +99,16 @@ function sendTransaction(isAdding) {
     date: new Date().toISOString()
   };
 
-  // if subtracting funds, convert amount to negative number
   if (!isAdding) {
     transaction.value *= -1;
   }
 
-  // add to beginning of current array of data
   transactions.unshift(transaction);
 
-  // re-run logic to populate ui with new record
   populateChart();
   populateTable();
   populateTotal();
   
-  // also send to server
   fetch("/api/transaction", {
     method: "POST",
     body: JSON.stringify(transaction),
@@ -129,16 +125,13 @@ function sendTransaction(isAdding) {
       errorEl.textContent = "Missing Information";
     }
     else {
-      // clear form
       nameEl.value = "";
       amountEl.value = "";
     }
   })
   .catch(err => {
-    // fetch failed, so save in indexed db
     saveRecord(transaction);
 
-    // clear form
     nameEl.value = "";
     amountEl.value = "";
   });
